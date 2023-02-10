@@ -50,4 +50,7 @@ class MaxPool:
             #         self.left_gradient[:, :, i*self.stride:i*self.stride+self.filter_dim, j*self.stride:j*self.stride+self.filter_dim] += np.multiply(self.mask[:, :, i, j], right_gradient[:, :, i, j])
             # return self.left_gradient
             pass
+
+    def clear(self):
+        self.left_gradient = None
     

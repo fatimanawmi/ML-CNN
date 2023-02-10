@@ -12,3 +12,6 @@ class Flatten:
 
     def backward(self, output_gradient):
         return  output_gradient.reshape(self.input.shape)
+    
+    def clear(self):
+        pass

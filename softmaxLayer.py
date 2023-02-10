@@ -17,3 +17,7 @@ class Softmax:
 
     # def softmax_derivative(self, x):
     #     return np.exp(x) / np.sum(np.exp(x), axis=1, keepdims=True)
+
+    def clear(self):
+        self.output = None
+        self.input = None

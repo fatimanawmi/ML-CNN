@@ -18,3 +18,7 @@ class ReLU:
         x[x <= 0] = 0
         x[x > 0] = 1
         return x
+    
+    def clear(self):
+        self.input = None
+        self.output = None

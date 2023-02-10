@@ -3,9 +3,10 @@ import pandas as pd
 import tqdm
 from sklearn.model_selection import train_test_split
 import os 
-
-from denseLayer import DenseLayer
+from sklearn.metrics import  ConfusionMatrixDisplay
 from network import Network
+from matplotlib import pyplot as plt
+import seaborn as sn
 
 
 X = np.load('X.npy')
@@ -40,6 +41,7 @@ y_val_true =  np.eye(10)[y_val]
 
 #train 
 learning_rates = [0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 0.7]
+epoch = 25
 
 for learning_rate in learning_rates:
     model = Network(learning_rate)
@@ -50,8 +52,10 @@ for learning_rate in learning_rates:
     training_f1 = []
     validation_f1 = []
 
-    for i in range(1):
-        print("Epoch %d" % i)
+    y_pred = None
+
+    for i in range(epoch):
+        print("Epoch : ", i+1, "Learning Rate : ", learning_rate)
         for j in tqdm.tqdm(range(0,X.shape[0], 64)):
             #mini batch : choose 128 random images
             index = np.random.randint(0, X_train.shape[0], 64)
@@ -61,36 +65,26 @@ for learning_rate in learning_rates:
 
         y_pred = model.forward(X_train)
 
-
-        #f1 score
-        f1 = model.f1_score(y_pred, y)
-        print("Training F1 Score = %.4f" % f1)
-        training_f1.append(f1)
-
         #training loss 
         loss = model.cross_entropy_loss(y_pred, y)
         print("Training Loss = %.4f" % loss)
         training_loss.append(loss)
 
-        #training accuracy
-        y_pred = np.argmax(y_pred, axis=1)
-        y_true = np.argmax(y, axis=1)
+        #f1 score
+        f1 = model.f1_macro(y_pred, y)
+        print("Training F1 Score = %.4f" % f1)
+        training_f1.append(f1)
 
-        accuracy = np.sum(y_pred == y_true) / y_true.shape[0]
-        accuracy = accuracy * 100
+       
+        #training accuracy
+
+        accuracy = model.accuracy(y_pred, y) * 100
         print("Training Accuracy = %.4f" % accuracy)
         training_accuracy.append(accuracy)
-
     
         #validation
 
         y_pred = model.forward(X_val)
-
-        #validation f1
-
-        f1 = model.f1_score(y_pred, y_val_true)
-        print("Validation F1 Score = %.4f" % f1)
-        validation_f1.append(f1)
 
         #validation loss
 
@@ -98,15 +92,19 @@ for learning_rate in learning_rates:
         print("Validation Loss = %.4f" % loss)
         validation_loss.append(loss)
 
+        #validation f1
+
+        f1 = model.f1_macro(y_pred, y_val_true)
+        print("Validation F1 Score = %.4f" % f1)
+        validation_f1.append(f1)
+
+       
         #validation accuracy
 
-        y_pred = np.argmax(y_pred, axis=1)
-        y_true = np.argmax(y_val_true, axis=1)
-
-        accuracy = np.sum(y_pred == y_true) / y_true.shape[0]
-        accuracy = accuracy * 100
+        accuracy = model.accuracy(y_pred, y_val_true) * 100
         print("Validation Accuracy = %.4f" % accuracy)
         validation_accuracy.append(accuracy)
+
 
     pd.DataFrame({
         'Training Loss': training_loss,
@@ -115,7 +113,25 @@ for learning_rate in learning_rates:
         'Validation Accuracy': validation_accuracy,
         'Training F1': training_f1,
         'Validation F1': validation_f1
-    }).to_csv('result_lr_'+str(learning_rate)+ '.csv', index=False )
+    }).to_csv('result_lr_'+str(learning_rate)+ '_.csv', index=False )
+
+    confusion_matrix = np.zeros((10, 10))
+
+    # generate confusion matrix : for ith row, jth column is the number of images of class i that are classified as class j
+    y_pred = np.argmax(y_pred, axis=1)
+    for i in range(10):
+        for j in range(10):
+            confusion_matrix[i][j] = np.sum(np.logical_and(y_pred == i, y_val == j))
+
+    classes = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    df_cfm = pd.DataFrame(confusion_matrix, index = classes, columns = classes)
+    plt.figure(figsize = (10,7))
+    cfm_plot = sn.heatmap(df_cfm, annot=True, cmap="YlGnBu")
+    cfm_plot.figure.savefig("cfm_"+str(learning_rate)+ "_.png")
+
+
+    model.clear()
+
     
 
 

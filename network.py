@@ -7,6 +7,11 @@ from reluActivaton import ReLU
 from maxpool import MaxPool
 from convLayer import ConvLayer
 
+from sklearn.metrics import f1_score
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import multilabel_confusion_matrix
+from sklearn.metrics import log_loss
+
 
 class Network:
     def __init__(self, learning_rate):
@@ -43,16 +48,27 @@ class Network:
         self.backward(y)
 
     def cross_entropy_loss(self, y_pred, y_true):
-        loss = -np.sum(y_true * np.log(y_pred + 1e-10)) / y_pred.shape[0]
+        loss = log_loss(y_true, y_pred)
         return loss
     
-    def f1_score(self, y_pred, y_true):
+    def f1_macro(self, y_pred, y_true):
         y_pred = np.argmax(y_pred, axis=1)
         y_true = np.argmax(y_true, axis=1)
-        tp = np.sum(y_pred * y_true)
-        fp = np.sum(y_pred * (1 - y_true))
-        fn = np.sum((1 - y_pred) * y_true)
-        precision = tp / (tp + fp)
-        recall = tp / (tp + fn)
-        f1 = 2 * precision * recall / (precision + recall)
+        f1 = f1_score(y_true, y_pred, average='macro')
         return f1
+    
+    def accuracy(self, y_pred, y_true):
+        y_pred = np.argmax(y_pred, axis=1)
+        y_true = np.argmax(y_true, axis=1)
+        accuracy = accuracy_score(y_true, y_pred)
+        return accuracy
+    
+    def confusion_matrix(self, y_pred, y_true):
+        y_pred = np.argmax(y_pred, axis=1)
+        y_true = np.argmax(y_true, axis=1)
+        confusion_matrix = multilabel_confusion_matrix(y_true, y_pred, labels=[0,1,2,3,4,5,6,7,8,9])
+        return confusion_matrix
+    
+    def clear(self):
+        for layer in self.model:
+            layer.clear()

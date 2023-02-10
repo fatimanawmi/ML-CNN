@@ -74,3 +74,18 @@ class DenseLayer:
         # self.W -= learning_rate * dW
         # self.b -= learning_rate * db
 
+    def clear(self):
+        self.m = None
+        self.X = None
+        self.z = None
+        self.W_momentum = 0
+        self.b_momentum = 0
+        self.W_variance = 0
+        self.b_variance = 0
+        self.W_momentum_hat = 0
+        self.b_momentum_hat = 0
+        self.W_variance_hat = 0
+        self.b_variance_hat = 0
+        self.iteration = 0
+        
+

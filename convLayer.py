@@ -161,3 +161,21 @@ class ConvLayer:
         assert not np.isinf(self.filters).any()
         assert not np.isinf(self.bias).any()
 
+    def clear(self):
+        #clear every stored variable except for the ones used in forward pass
+        self.left_gradient = None
+        self.filters_gradient = None
+        self.bias_gradient = None
+        self.input = None
+        self.output = None
+        self.filters_momentum = None
+        self.bias_momentum = None
+        self.filters_variance = None
+        self.bias_variance = None
+        self.filters_momentum_hat = None
+        self.bias_momentum_hat = None
+        self.filters_variance_hat = None
+        self.bias_variance_hat = None
+        self.iteration = 0
+        
+
