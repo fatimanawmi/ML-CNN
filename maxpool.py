@@ -44,11 +44,6 @@ class MaxPool:
             padded[:, :, :self.left_gradient.shape[2], :self.left_gradient.shape[3]] = self.left_gradient
             return padded
         else:
-            # self.left_gradient = np.zeros(self.input.shape)
-            # for i in range(self.out_h):
-            #     for j in range(self.out_w):
-            #         self.left_gradient[:, :, i*self.stride:i*self.stride+self.filter_dim, j*self.stride:j*self.stride+self.filter_dim] += np.multiply(self.mask[:, :, i, j], right_gradient[:, :, i, j])
-            # return self.left_gradient
             pass
 
     def clear(self):
