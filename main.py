@@ -22,13 +22,13 @@ X_val = np.load('X_val.npy')
 y_val = pd.read_csv(os.path.join('..', 'dataset', 'training-d.csv'))
 y_val = y_val['digit'].values
 
-# make X, y smaller to 500 images
-# X, X_val, y, y_val = train_test_split(X, y, test_size=0.9, random_state=42, stratify=y)
+# make X, y smaller 
+X, temp1, y, temp2 = train_test_split(X, y, test_size=0.9, random_state=42, stratify=y)
 
 print(X.shape, y.shape)
 
 #split train and validation : 80% train, 20% validation
-# X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
 X_train = X
 y_train = y
@@ -39,10 +39,16 @@ y_val_true =  np.eye(10)[y_val]
 
 
 #train 
-model = Network(0.001)
+learning_rate = 0.001
+model = Network(learning_rate)
+training_loss = []
+validation_loss = []
+training_accuracy = []
+validation_accuracy = []
+training_f1 = []
+validation_f1 = []
 
-
-for i in range(20):
+for i in range(2):
     print("Epoch %d" % i)
     for j in tqdm.tqdm(range(0,X.shape[0], 64)):
         #mini batch : choose 128 random images
@@ -51,32 +57,57 @@ for i in range(20):
         y_batch = y[index]
         model.train(X_batch, y_batch)
 
-    #training loss 
     y_pred = model.forward(X_train)
-    loss = model.loss(y_pred, y)
+
+
+    #f1 score
+    f1 = model.f1_score(y_pred, y)
+    print("Training F1 Score = %.4f" % f1)
+    training_f1.append(f1)
+
+    #training loss 
+    loss = model.cross_entropy_loss(y_pred, y)
     print("Training Loss = %.4f" % loss)
+    training_loss.append(loss)
 
     #training accuracy
     y_pred = np.argmax(y_pred, axis=1)
-    y_true = np.argmax(y_val_true, axis=1)
+    y_true = np.argmax(y, axis=1)
 
     accuracy = np.sum(y_pred == y_true) / y_true.shape[0]
     accuracy = accuracy * 100
     print("Training Accuracy = %.4f" % accuracy)
+    training_accuracy.append(accuracy)
+
+   
+    #validation
 
     y_pred = model.forward(X_val)
+
+    #validation f1
+
+    f1 = model.f1_score(y_pred, y_val_true)
+    print("Validation F1 Score = %.4f" % f1)
+    validation_f1.append(f1)
+
+    #validation loss
+
+    loss = model.cross_entropy_loss(y_pred, y_val_true)
+    print("Validation Loss = %.4f" % loss)
+
+    #validation accuracy
+
     y_pred = np.argmax(y_pred, axis=1)
     y_true = np.argmax(y_val_true, axis=1)
 
     accuracy = np.sum(y_pred == y_true) / y_true.shape[0]
     accuracy = accuracy * 100
     print("Validation Accuracy = %.4f" % accuracy)
+    validation_accuracy.append(accuracy)
 
-    loss = model.loss(y_pred, y_val_true)
-    print("Validation Loss = %.4f" % loss)
-
-    f1 = model.f1_score(y_pred, y_val_true)
-    print("Validation F1 Score = %.4f" % f1)
+pd.DataFrame(training_loss, training_accuracy, training_f1, validation_loss, validation_accuracy, validation_f1, 
+             columns=['Training Loss', 'Training Accuracy', 'Training F1', 'Validation Loss', 'Validation Accuracy', 'Validation F1']).to_csv('result_lr_'+learning_rate+ '.csv')
+    
 
 
 
