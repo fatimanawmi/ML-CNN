@@ -37,7 +37,7 @@ y_test_true =  np.eye(10)[y_test]
 
 
 #train 
-learning_rate = 0.005
+learning_rate = 0.001
 epoch = 20
 
 model = Network(learning_rate)
