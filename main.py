@@ -39,7 +39,7 @@ y_val_true =  np.eye(10)[y_val]
 
 
 #train 
-model = Network()
+model = Network(0.001)
 
 
 for i in range(20):
@@ -51,14 +51,33 @@ for i in range(20):
         y_batch = y[index]
         model.train(X_batch, y_batch)
 
+    #training loss 
+    y_pred = model.forward(X_train)
+    loss = model.loss(y_pred, y)
+    print("Training Loss = %.4f" % loss)
+
+    #training accuracy
+    y_pred = np.argmax(y_pred, axis=1)
+    y_true = np.argmax(y_val_true, axis=1)
+
+    accuracy = np.sum(y_pred == y_true) / y_true.shape[0]
+    accuracy = accuracy * 100
+    print("Training Accuracy = %.4f" % accuracy)
+
     y_pred = model.forward(X_val)
     y_pred = np.argmax(y_pred, axis=1)
     y_true = np.argmax(y_val_true, axis=1)
+
     accuracy = np.sum(y_pred == y_true) / y_true.shape[0]
     accuracy = accuracy * 100
-    print("Accuracy = %.4f" % accuracy)
-#accuracy
-#reverse flatten
+    print("Validation Accuracy = %.4f" % accuracy)
+
+    loss = model.loss(y_pred, y_val_true)
+    print("Validation Loss = %.4f" % loss)
+
+    f1 = model.f1_score(y_pred, y_val_true)
+    print("Validation F1 Score = %.4f" % f1)
+
 
 
 

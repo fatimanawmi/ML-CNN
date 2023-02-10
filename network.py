@@ -9,11 +9,9 @@ from convLayer import ConvLayer
 
 
 class Network:
-    def __init__(self):
+    def __init__(self, learning_rate):
         # lenet
-        self.model = [ConvLayer(6, 5, 1, 0), ReLU(), MaxPool(2, 2), ConvLayer(16, 5, 1, 0), ReLU(), MaxPool(2, 2), Flatten(), DenseLayer(120), ReLU(), DenseLayer(84), ReLU(), DenseLayer(10), Softmax()]
-        #alexnet
-        # self.model = [ConvLayer(96, 11, 4, 0), ReLU(), MaxPool(2, 2), ConvLayer(256, 5, 1, 2), ReLU(), ConvLayer(384, 3, 1, 1), ReLU(), ConvLayer(384, 3, 1, 1), ReLU(), ConvLayer(256, 3, 1, 1), ReLU(), MaxPool(2, 2), Flatten(), DenseLayer(4096), ReLU(), DenseLayer(4096), ReLU(), DenseLayer(1000), Softmax()]
+        self.model = [ConvLayer(6, 5, 1, 0,learning_rate), ReLU(), MaxPool(2, 2), ConvLayer(16, 5, 1, 0,learning_rate), ReLU(), MaxPool(2, 2), Flatten(), DenseLayer(120,learning_rate), ReLU(), DenseLayer(84,learning_rate), ReLU(), DenseLayer(10,learning_rate), Softmax()]
     
     def forward(self, X):
         for layer in self.model:
