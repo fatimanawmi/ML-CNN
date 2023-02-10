@@ -47,3 +47,14 @@ class Network:
     def cross_entropy_loss(self, y_pred, y_true):
         loss = -np.sum(y_true * np.log(y_pred + 1e-10)) / y_pred.shape[0]
         return loss
+    
+    def f1_score(self, y_pred, y_true):
+        y_pred = np.argmax(y_pred, axis=1)
+        y_true = np.argmax(y_true, axis=1)
+        tp = np.sum(y_pred * y_true)
+        fp = np.sum(y_pred * (1 - y_true))
+        fn = np.sum((1 - y_pred) * y_true)
+        precision = tp / (tp + fp)
+        recall = tp / (tp + fn)
+        f1 = 2 * precision * recall / (precision + recall)
+        return f1
