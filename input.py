@@ -17,33 +17,46 @@ def process_image2(path):
         #grayscale
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         
-        # Invert image 
-        image = 255 - image
-        
         # Increase contrast
         image = adjust_contrast_grey(image)
+        # plt.imshow(image, cmap='gray')
+        # plt.savefig('image1.png')
+        
+        # Invert image 
+        image = 255 - image
+        # plt.imshow(image, cmap='gray')
+        # plt.savefig('image2.png')
+        
+        
         
         # Apply dilation
-        kernel = np.ones((3, 3), np.uint8)
+        kernel = np.ones((5, 5), np.uint8)
         image = cv2.dilate(image, kernel, iterations=1)
+        # plt.imshow(image, cmap='gray')
+        # plt.savefig('image3.png')
         
         # Apply Thresholding
-        blank, image = cv2.threshold(image, 0.3, 1, cv2.THRESH_BINARY)
+        blank, image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
+        # plt.imshow(image, cmap='gray')
+        # plt.savefig('image4.png')
         
         # Apply cropping by dropping rows and columns with average pixel intensity >= 253
-        image  = np.where(image < 253, 0, image)
+        # image  = np.where(image > 130, 0, image)
+        # plt.imshow(image, cmap='gray')
+        # plt.savefig('image5.png')
         
         # Resize to 28x28
         image = cv2.resize(image, (28, 28))
         
         # Divide pixel values by 255
         image = image / 255.0
+        # plt.imshow(image, cmap='gray')
+        # plt.savefig('image6.png')
         
         image = np.expand_dims(image, axis=0)
         # print(image.shape)
         images.append(image)
         
-        cv2.imwrite('image.png', image)
         
      # Combine the images into a single 4D numpy array
     images = np.array(images)
