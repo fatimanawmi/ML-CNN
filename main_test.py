@@ -58,6 +58,30 @@ for i in range(epoch):
         X_batch = X_train[index]
         y_batch = y[index]
         model.train(X_batch, y_batch)
+
+    #Test
+
+    y_pred = model.forward(X_test)
+
+    #Test loss
+
+    loss = model.cross_entropy_loss(y_pred, y_test_true)
+    print("Test Loss = %.4f" % loss)
+    Test_loss.append(loss)
+
+    #Test f1
+
+    f1 = model.f1_macro(y_pred, y_test_true)
+    print("Test F1 Score = %.4f" % f1)
+    Test_f1.append(f1)
+
+
+    #Test accuracy
+
+    accuracy = model.accuracy(y_pred, y_test_true) * 100
+    print("Test Accuracy = %.4f" % accuracy)
+    Test_accuracy.append(accuracy)
+    
     
 
 #Test
