@@ -19,9 +19,9 @@ y_c = pd.read_csv(path)
 y = pd.concat([y_a, y_b, y_c])
 y = y['digit'].values
 
-# X_val = np.load('X_val.npy')
-# y_val = pd.read_csv(os.path.join('..', 'dataset', 'training-d.csv'))
-# y_val = y_val['digit'].values
+X_val = np.load('X_val.npy')
+y_val = pd.read_csv(os.path.join('..', 'dataset', 'training-d.csv'))
+y_val = y_val['digit'].values
 
 # make X, y smaller 
 # X, temp1, y, temp2 = train_test_split(X, y, test_size=0.9, random_state=42, stratify=y)
@@ -40,7 +40,7 @@ y_val_true =  np.eye(10)[y_val]
 
 
 #train 
-learning_rates = [0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 0.7]
+learning_rates = 0.005
 epoch = 25
 
 for learning_rate in learning_rates:

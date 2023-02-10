@@ -72,3 +72,7 @@ class Network:
     def clear(self):
         for layer in self.model:
             layer.clear()
+            
+    def pickle_predict(self, X):
+        y_pred = self.forward(X)
+        return y_pred
