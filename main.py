@@ -19,7 +19,7 @@ y = pd.concat([y_a, y_b, y_c])
 y = y['digit'].values
 
 X_val = np.load('X_val.npy')
-y_val = pd.read_csv('..\dataset\\training-d.csv')
+y_val = pd.read_csv(os.path.join('..', 'dataset', 'training-d.csv'))
 y_val = y_val['digit'].values
 
 # make X, y smaller to 500 images
