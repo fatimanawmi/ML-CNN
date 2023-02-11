@@ -11,6 +11,8 @@ import cv2
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from Train_1705093 import *
+
 
 
 def process_image(path):
@@ -54,7 +56,7 @@ def process_image(path):
 
 path = sys.argv[1]
 
-model = pickle.load(open('1705093_model.pkl', 'rb'))
+model = pickle.load(open('1705093_model__.pkl', 'rb'))
 
 X, names = process_image(path)
 
