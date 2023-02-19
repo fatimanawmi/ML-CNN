@@ -66,7 +66,7 @@ y_pred = np.argmax(y_pred, axis=1)
 
 #make a dataframe with 2 columns, first column contains the input file names (just the name, excluding path) and the second column contains the corresponding predicted digit.
 
-df = pd.DataFrame({'filename': names, 'digit': y_pred})
+df = pd.DataFrame({'FileName': names, 'Digit': y_pred})
 
 df.to_csv(path + '/1705093_prediction.csv', index=False)
 

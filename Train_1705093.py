@@ -586,92 +586,92 @@ def get_X_y():
 
 #=======================================================================================================================================================
 
-# X, y, X_val, y_val= get_X_y()
-# # X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)
+X, y, X_val, y_val= get_X_y()
+# X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)
 
-# # one hot encoding
-# y = np.eye(10)[y]
-# y_val_true =  np.eye(10)[y_val]
+# one hot encoding
+y = np.eye(10)[y]
+y_val_true =  np.eye(10)[y_val]
 
-# X_train = X
-# y_train = y
-
-
-# learning_rate = 0.001
-# epoch = 25
-
-# model = Network(learning_rate)
-
-# y_pred = None
-
-# training_loss = []
-# validation_loss = []
-# training_accuracy = []
-# validation_accuracy = []
-# training_f1 = []
-# validation_f1 = []
+X_train = X
+y_train = y
 
 
-# for i in range(epoch):
-#     print("Epoch : ", i+1, "Learning Rate : ", learning_rate)
-#     for j in tqdm.tqdm(range(0,X.shape[0], 64)):
-#         #mini batch : choose 128 random images
-#         index = np.random.randint(0, X_train.shape[0], 64)
-#         X_batch = X_train[index]
-#         y_batch = y[index]
-#         model.train(X_batch, y_batch)
+learning_rate = 0.001
+epoch = 25
 
-#     y_pred = model.forward(X_train)
+model = Network(learning_rate)
 
-#     #training loss 
-#     loss = model.cross_entropy_loss(y_pred, y)
-#     print("Training Loss = %.4f" % loss)
-#     training_loss.append(loss)
+y_pred = None
 
-#     #f1 score
-#     f1 = model.f1_macro(y_pred, y)
-#     print("Training F1 Score = %.4f" % f1)
-#     training_f1.append(f1)
+training_loss = []
+validation_loss = []
+training_accuracy = []
+validation_accuracy = []
+training_f1 = []
+validation_f1 = []
 
-    
-#     #training accuracy
 
-#     accuracy = model.accuracy(y_pred, y) * 100
-#     print("Training Accuracy = %.4f" % accuracy)
-#     training_accuracy.append(accuracy)
+for i in range(epoch):
+    print("Epoch : ", i+1, "Learning Rate : ", learning_rate)
+    for j in tqdm.tqdm(range(0,X.shape[0], 64)):
+        #mini batch : choose 128 random images
+        index = np.random.randint(0, X_train.shape[0], 64)
+        X_batch = X_train[index]
+        y_batch = y[index]
+        model.train(X_batch, y_batch)
 
-#     #validation
+    y_pred = model.forward(X_train)
 
-#     y_pred = model.forward(X_val)
+    #training loss 
+    loss = model.cross_entropy_loss(y_pred, y)
+    print("Training Loss = %.4f" % loss)
+    training_loss.append(loss)
 
-#     #validation loss
-
-#     loss = model.cross_entropy_loss(y_pred, y_val_true)
-#     print("Validation Loss = %.4f" % loss)
-#     validation_loss.append(loss)
-
-#     #validation f1
-
-#     f1 = model.f1_macro(y_pred, y_val_true)
-#     print("Validation F1 Score = %.4f" % f1)
-#     validation_f1.append(f1)
+    #f1 score
+    f1 = model.f1_macro(y_pred, y)
+    print("Training F1 Score = %.4f" % f1)
+    training_f1.append(f1)
 
     
-#     #validation accuracy
+    #training accuracy
 
-#     accuracy = model.accuracy(y_pred, y_val_true) * 100
-#     print("Validation Accuracy = %.4f" % accuracy)
-#     validation_accuracy.append(accuracy)
+    accuracy = model.accuracy(y_pred, y) * 100
+    print("Training Accuracy = %.4f" % accuracy)
+    training_accuracy.append(accuracy)
+
+    #validation
+
+    y_pred = model.forward(X_val)
+
+    #validation loss
+
+    loss = model.cross_entropy_loss(y_pred, y_val_true)
+    print("Validation Loss = %.4f" % loss)
+    validation_loss.append(loss)
+
+    #validation f1
+
+    f1 = model.f1_macro(y_pred, y_val_true)
+    print("Validation F1 Score = %.4f" % f1)
+    validation_f1.append(f1)
+
+    
+    #validation accuracy
+
+    accuracy = model.accuracy(y_pred, y_val_true) * 100
+    print("Validation Accuracy = %.4f" % accuracy)
+    validation_accuracy.append(accuracy)
 
 
-# pd.DataFrame({
-#     'Training Loss': training_loss,
-#     'Validation Loss': validation_loss,
-#     'Training Accuracy': training_accuracy,
-#     'Validation Accuracy': validation_accuracy,
-#     'Training F1': training_f1,
-#     'Validation F1': validation_f1
-# }).to_csv('result_lr_'+str(learning_rate)+ '_.csv', index=False )
+pd.DataFrame({
+    'Training Loss': training_loss,
+    'Validation Loss': validation_loss,
+    'Training Accuracy': training_accuracy,
+    'Validation Accuracy': validation_accuracy,
+    'Training F1': training_f1,
+    'Validation F1': validation_f1
+}).to_csv('result_lr_'+str(learning_rate)+ '_.csv', index=False )
 
 # confusion_matrix = np.zeros((10, 10))
 
