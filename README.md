@@ -13,4 +13,4 @@ Implemented a convolutional neural network for an image classification task, usi
 5. Fully-connected layer: a dense layer. There will be one parameter: output dimension.
 6. Softmax: it will convert final layer projections to normalized probabilities.
 
-7. 91% Accuracy was achieved.
+ 91% Accuracy was achieved.
